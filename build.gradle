@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group 'sonnicon.groovymodmod'
+version '0.1'
+
+sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.main.resources.srcDirs = ["assets/"]
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+configurations{
+    dep
+}
+
+dependencies {
+    implementation 'com.github.Anuken:Mindustry:v109'
+    dep 'com.github.apache.groovy:groovy-ant:GROOVY_4_0_0_ALPHA_1'
+    configurations.compile.extendsFrom(configurations.dep)
+}
+
+jar {
+    manifest {
+        attributes(
+                'Class-Path': configurations.dep.collect { it.getName() }.join(' '),
+                'Main-Class': project.group + '.groovymodmod.GroovyModMod'
+        )
+    }
+    from {
+        configurations.dep.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
