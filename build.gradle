@@ -37,8 +37,7 @@ task dexify doLast {
     exec{
         workingDir jar.archiveFile.get().asFile.parent
 
-        def command = ["dx", "--dex", "--min-sdk-version=26", "--output=dexed-$buildFilename", buildFilename]
-        println(command.join(" "))
+        def command = ["dx", "--dex", "--multi-dex", "--min-sdk-version=26", "--output=dexed-$buildFilename", buildFilename]
         if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
             commandLine ("cmd", "/c", *command)
         } else {
