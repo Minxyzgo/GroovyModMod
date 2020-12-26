@@ -1,7 +1,5 @@
 package sonnicon.groovymodmod;
 
-import groovy.lang.GroovyClassLoader;
-import groovy.util.GroovyScriptEngine;
 import mindustry.Vars;
 import mindustry.mod.Mod;
 
@@ -21,6 +19,7 @@ public class GroovyModMod extends Mod{
                 }
             }
         });
+
         try{
             GroovyScriptEngine gse = new GroovyScriptEngine(Vars.modDirectory.path(), gcl);
             Vars.modDirectory.findAll().each(fi -> {

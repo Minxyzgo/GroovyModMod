@@ -2,35 +2,40 @@ plugins {
     id 'java'
 }
 
-group 'sonnicon.groovymodmod'
-version '0.1'
+final buildFilename = "groovymodmod.jar"
 
-sourceSets.main.java.srcDirs = ["src/"]
-sourceSets.main.resources.srcDirs = ["assets/"]
+group 'sonnicon'
+
+sourceCompatibility = 1.8
+sourceSets.main {
+    java.srcDir("src/")
+    resources.srcDir("assets/")
+}
 
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
 }
 
-configurations{
-    dep
-}
-
 dependencies {
-    implementation 'com.github.Anuken:Mindustry:v109'
-    dep 'com.github.apache.groovy:groovy-ant:GROOVY_4_0_0_ALPHA_1'
-    configurations.compile.extendsFrom(configurations.dep)
+    implementation 'com.github.Anuken.Mindustry:core:v121.4'
 }
 
 jar {
-    manifest {
-        attributes(
-                'Class-Path': configurations.dep.collect { it.getName() }.join(' '),
-                'Main-Class': project.group + '.groovymodmod.GroovyModMod'
-        )
-    }
-    from {
-        configurations.dep.collect { it.isDirectory() ? it : zipTree(it) }
+    archiveName buildFilename
+}
+
+task dexify doLast {
+    exec{
+        workingDir jar.archiveFile.get().asFile.parent
+
+        def command = ["dx", "--dex", "--output=dexed-$buildFilename", buildFilename]
+        if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+            commandLine ("cmd", "/c", *command)
+        } else {
+            commandLine (*command)
+        }
     }
 }
+
+task buildDex dependsOn "build", "dexify"
