@@ -1,14 +1,11 @@
-package sonnicon.groovymodmod;
+package sonnicon.groovymodmod
 
-import mindustry.Vars;
-import mindustry.mod.Mod;
+import mindustry.Vars
+import mindustry.mod.Mod
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-
-public class GroovyModMod extends Mod{
+class GroovyModMod extends Mod{
     @Override
-    public void init(){
+    void init(){
         GroovyClassLoader gcl = new GroovyClassLoader(getClass().getClassLoader());
         Vars.modDirectory.findAll().each(fi -> {
             if(fi.extension().equals("jar") || fi.extension().equals("groovy")){

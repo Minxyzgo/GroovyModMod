@@ -1,5 +1,5 @@
 plugins {
-    id 'java'
+    id 'groovy'
 }
 
 final buildFilename = "groovymodmod.jar"
@@ -8,7 +8,7 @@ group 'sonnicon'
 
 sourceCompatibility = 1.8
 sourceSets.main {
-    java.srcDir("src/")
+    groovy.srcDir("src/")
     resources.srcDir("assets/")
 }
 
@@ -18,18 +18,27 @@ repositories {
 }
 
 dependencies {
+    compile 'org.apache.groovy:groovy:4.0.0-alpha-2'
     implementation 'com.github.Anuken.Mindustry:core:v121.4'
 }
 
 jar {
     archiveName buildFilename
+    manifest {
+        attributes 'Main-Class': group + 'groovymodmod.GroovyModMod'
+    }
+    //archiveClassifier = "all"
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 task dexify doLast {
     exec{
         workingDir jar.archiveFile.get().asFile.parent
 
-        def command = ["dx", "--dex", "--output=dexed-$buildFilename", buildFilename]
+        def command = ["dx", "--dex", "--min-sdk-version=26", "--output=dexed-$buildFilename", buildFilename]
+        println(command.join(" "))
         if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
             commandLine ("cmd", "/c", *command)
         } else {
