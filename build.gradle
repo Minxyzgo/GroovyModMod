@@ -27,7 +27,6 @@ jar {
     manifest {
         attributes 'Main-Class': group + 'groovymodmod.GroovyModMod'
     }
-    //archiveClassifier = "all"
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
