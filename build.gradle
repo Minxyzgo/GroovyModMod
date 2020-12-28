@@ -2,11 +2,8 @@ plugins {
     id 'groovy'
 }
 
-final buildFilename = "groovymodmod.jar"
+group pGroup
 
-group 'sonnicon'
-
-sourceCompatibility = 1.8
 sourceSets.main {
     groovy.srcDir("src/")
     resources.srcDir("assets/")
@@ -19,11 +16,11 @@ repositories {
 
 dependencies {
     compile 'org.apache.groovy:groovy:4.0.0-alpha-2'
-    implementation 'com.github.Anuken.Mindustry:core:v121.4'
+    implementation "com.github.Anuken.Mindustry:core:$pMindustryVersion"
 }
 
 jar {
-    archiveName buildFilename
+    archiveFileName.set pArtifactFilename
     manifest {
         attributes 'Main-Class': group + 'groovymodmod.GroovyModMod'
     }
@@ -32,17 +29,23 @@ jar {
     }
 }
 
-task dexify doLast {
-    exec{
-        workingDir jar.archiveFile.get().asFile.parent
+task dexify(type: Jar) {
+    archiveName "dexed-$pArtifactFilename"
 
-        def command = ["dx", "--dex", "--multi-dex", "--min-sdk-version=26", "--output=dexed-$buildFilename", buildFilename]
-        if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
-            commandLine ("cmd", "/c", *command)
-        } else {
-            commandLine (*command)
+    final File jarArtifact = new File(tasks.jar.archiveFile.get().asFile.parent, pArtifactFilename),
+               dexedArtifact = new File(tasks.dexify.getTemporaryDir(), "dexed.jar")
+    doFirst {
+        exec {
+            workingDir dexedArtifact.parent
+            def command = ["d8", "--min-api", pMinApi, "--output", dexedArtifact, jarArtifact]
+            if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows'))
+                commandLine("cmd", "/c", *command)
+            else
+                commandLine(*command)
         }
     }
+
+    from(zipTree(jarArtifact), zipTree(dexedArtifact))
 }
 
 task buildDex dependsOn "build", "dexify"
