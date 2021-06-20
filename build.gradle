@@ -15,8 +15,8 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.groovy:groovy:4.0.0-alpha-2'
-    implementation "com.github.Anuken.Mindustry:core:$pMindustryVersion"
+    implementation 'org.apache.groovy:groovy:3.0.8'
+    compileOnly "com.github.Anuken.Mindustry:core:126.2"
 }
 
 jar {
