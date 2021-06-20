@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    compile 'org.codehaus.groovy:groovy:2.5.1'
+    compile 'org.codehaus.groovy:groovy:2.4.5'
     compileOnly "com.github.Anuken.Mindustry:core:126.2"
 }
 
