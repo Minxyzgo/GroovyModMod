@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.groovy:groovy:3.0.8'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.8'
     compileOnly "com.github.Anuken.Mindustry:core:126.2"
 }
 
