@@ -11,10 +11,11 @@ public class GroovyModMod extends Mod {
     @Override
     public void loadContent() {
         GroovyClassLoader gcl = new GroovyClassLoader(getClass().getClassLoader());
+        Log.info("Started to load Groovy Script");
         for(Fi file : Vars.modDirectory.list()){
             if(!file.extension().equals("jar") && !file.extension().equals("zip") && !(file.isDirectory() && (file.child("mod.json").exists() || file.child("mod.hjson").exists()))) continue;
 
-            Log.debug("[Groovy] Loading mod script @", file);
+            Log.info("[Groovy] Loading mod script @", file);
             try{
                 loadScript(file, gcl);
             }catch(Throwable e) {
