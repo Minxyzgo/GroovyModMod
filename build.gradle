@@ -1,11 +1,11 @@
 plugins {
-    id 'groovy'
+    id 'java'
 }
 
 group pGroup
 
 sourceSets.main {
-    groovy.srcDir("src/")
+    java.srcDir("src/")
     resources.srcDir("assets/")
 }
 
@@ -16,7 +16,8 @@ repositories {
 
 dependencies {
     compile 'org.codehaus.groovy:groovy:2.4.5'
-    compileOnly "com.github.Anuken.Mindustry:core:126.2"
+    compileOnly 'com.github.Anuken.Mindustry:core:v126.2'
+    compileOnly 'com.github.Anuken.Arc:arc-core:v126.2'
 }
 
 jar {

@@ -1,10 +1,10 @@
 {
   "name": "groovymodmod",
   "displayName": "[#03fcb1[]]Groovy Mod Mod[[]]",
-  "author": "[#8738ff[]]Sonnicon[[]]",
+  "author": "[#8738ff[]]Sonnicon[[]], Minxyzgo",
   "description": "[#bb99ff[]]Allows execution of Groovy scripts (*.groovy) from the Mods folder.[[]]",
   "version": "0.2",
-  "minGameVersion": "105",
+  "minGameVersion": "126.2",
   "main": "sonnicon.groovymodmod.GroovyModMod",
   "dependencies": [],
   "hidden": false
