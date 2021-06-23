@@ -31,7 +31,7 @@ public class GroovyModMod extends Mod {
             Fi main = scripts.child("main.groovy");
             if(main.exists() && !main.isDirectory()) {
                 try {
-                    GroovyScriptEngine engine = new GroovyScriptEngine(scripts.path(), gcl);
+                    GroovyScriptEngine engine = new GroovyScriptEngine(scripts.path() + "/", gcl);
                     engine.loadScriptByName("main.groovy");
                     Log.info("[Groovy] Succeed to load mod: @", mod.name);
                 } catch (Exception e) {
