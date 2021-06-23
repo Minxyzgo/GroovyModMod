@@ -15,11 +15,8 @@ public class GroovyModMod extends Mod {
     public void loadContent() {
         GroovyClassLoader gcl = new GroovyClassLoader(getClass().getClassLoader());
         Log.info("Started to load Groovy Script");
-
-        Mods.LoadedMod locate = Vars.mods.locateMod("groovymodmod");
-        if(locate == null) throw new IllegalAccessError("Cannot find Groovy Script Loader mod");
         Vars.mods.eachEnabled(mod -> {
-            if(mod.dependencies.contains(locate)) {
+            if(mod.meta.dependencies.contains("groovymodmod")) {
                 loadScript(mod.root, mod, gcl);
             }
         });
