@@ -7,31 +7,32 @@ import groovy.lang.GroovyClassLoader;
 import groovy.util.GroovyScriptEngine;
 import mindustry.Vars;
 import mindustry.mod.Mod;
+import mindustry.mod.Mods;
+
 public class GroovyModMod extends Mod {
     @Override
     public void loadContent() {
         GroovyClassLoader gcl = new GroovyClassLoader(getClass().getClassLoader());
         Log.info("Started to load Groovy Script");
-        for(Fi file : Vars.modDirectory.list()){
-            if(!file.extension().equals("jar") && !file.extension().equals("zip") && !(file.isDirectory() && (file.child("mod.json").exists() || file.child("mod.hjson").exists()))) continue;
 
-            Log.info("[Groovy] Loading mod script @", file);
-            try{
-                loadScript(file, gcl);
-            }catch(Throwable e) {
+        Mods.LoadedMod locate = Vars.mods.locateMod("groovymodmod");
+        if(locate == null) throw new IllegalAccessError("Cannot find Groovy Script Loader mod");
+        Vars.mods.eachEnabled(mod -> {
+            if(mod.dependencies.contains(locate)) {
+                Log.info("[Groovy] Loading mod script from mod @", mod.name);
+                try {
+                    loadScript(mod.root, mod, gcl);
+                } catch (Throwable e) {
 
-                Log.err("Failed to load groovy Script @. Skipping.", file);
-                Log.err(e);
+                    Log.err("[Groovy] Failed to load mod @. Skipping.", mod.name);
+                    Log.err(e);
 
+                }
             }
-        }
+        });
     }
 
-    public void loadScript(Fi source, GroovyClassLoader gcl) {
-        Fi zip = source.isDirectory() ? source : new ZipFi(source);
-        if(zip.list().length == 1 && zip.list()[0].isDirectory()){
-            zip = zip.list()[0];
-        }
+    public void loadScript(Fi zip, Mods.LoadedMod mod, GroovyClassLoader gcl) {
 
         Fi scripts = zip.child("groovy");
         if(scripts.exists() && scripts.isDirectory()) {
@@ -40,11 +41,14 @@ public class GroovyModMod extends Mod {
                 try {
                     GroovyScriptEngine engine = new GroovyScriptEngine(scripts.path(), gcl);
                     engine.loadScriptByName("main.groovy");
+                    Log.info("[Groovy] Succeed to load mod: @", mod.name);
                 } catch (Exception e) {
                     Log.err("failed to load groovy script. file: " + zip.path());
                     Log.err(e);
                 }
             }
+        } else {
+            Log.warn("Mod: @ didn't have any groovy scripts file", mod.name);
         }
     }
 
