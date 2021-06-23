@@ -3,6 +3,7 @@ package sonnicon.groovymodmod;
 import arc.files.Fi;
 import arc.files.ZipFi;
 import arc.util.Log;
+import arc.util.Time;
 import groovy.lang.GroovyClassLoader;
 import groovy.util.GroovyScriptEngine;
 import mindustry.Vars;
@@ -25,9 +26,10 @@ public class GroovyModMod extends Mod {
     }
 
     public void loadScript(Fi zip, Mods.LoadedMod mod, GroovyClassLoader gcl) {
+        Time.mark();
+        Fi scripts = zip.child("groovy");
         Log.info("[Groovy] Loading mod script from mod @", mod.name);
 
-        Fi scripts = zip.child("groovy");
         if(scripts.exists() && scripts.isDirectory()) {
             Fi main = zip.child("main.groovy");
             if(main.exists() && !main.isDirectory()) {
@@ -43,6 +45,8 @@ public class GroovyModMod extends Mod {
         } else {
             Log.warn("Mod: @ didn't have any groovy scripts file", mod.name);
         }
+
+        Log.info("load end time: @", Time.elapsed());
     }
 
 }
