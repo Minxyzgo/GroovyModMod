@@ -15,6 +15,7 @@ repositories {
 }
 
 dependencies {
+    compile 'org.codehaus.groovy:groovy-jsr223:2.4.5'
     compile 'org.codehaus.groovy:groovy:2.4.5'
     compileOnly 'com.github.Anuken.Mindustry:core:v126.2'
     compileOnly 'com.github.Anuken.Arc:arc-core:v126.2'
