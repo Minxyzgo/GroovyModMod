@@ -16,12 +16,12 @@ public class GroovyModMod extends Mod {
         GroovyClassLoader gcl = new GroovyClassLoader(getClass().getClassLoader());
         Log.info("Started to load Groovy Script");
 
-        //Mods.LoadedMod locate = Vars.mods.locateMod("groovymodmod");
-        //if(locate == null) throw new IllegalAccessError("Cannot find Groovy Script Loader mod");
+        Mods.LoadedMod locate = Vars.mods.locateMod("groovymodmod");
+        if(locate == null) throw new IllegalAccessError("Cannot find Groovy Script Loader mod");
         Vars.mods.eachEnabled(mod -> {
-            //if(mod.dependencies.contains(locate)) {
+            if(mod.dependencies.contains(locate)) {
                 loadScript(mod.root, mod, gcl);
-            //}
+            }
         });
     }
 
@@ -31,7 +31,7 @@ public class GroovyModMod extends Mod {
         Log.info("[Groovy] Loading mod script from mod @", mod.name);
 
         if(scripts.exists() && scripts.isDirectory()) {
-            Fi main = zip.child("main.groovy");
+            Fi main = scripts.child("main.groovy");
             if(main.exists() && !main.isDirectory()) {
                 try {
                     GroovyScriptEngine engine = new GroovyScriptEngine(scripts.path(), gcl);
@@ -41,12 +41,14 @@ public class GroovyModMod extends Mod {
                     Log.err("failed to load groovy script. file: " + zip.path());
                     Log.err(e);
                 }
+            } else {
+                Log.info("mod didn't have main groovy script. require: groovy/main.groovy");
             }
         } else {
-            Log.warn("Mod: @ didn't have any groovy scripts file", mod.name);
+            Log.info("Mod: @ didn't have any groovy scripts file", mod.name);
         }
 
-        Log.info("load end time: @", Time.elapsed());
+        Log.info("[Groovy] load end time: @", Time.elapsed());
     }
 
 }
