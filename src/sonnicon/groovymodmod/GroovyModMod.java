@@ -5,6 +5,7 @@ import arc.files.ZipFi;
 import arc.util.Log;
 import arc.util.Time;
 import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyShell;
 import groovy.util.GroovyScriptEngine;
 import mindustry.Vars;
 import mindustry.mod.Mod;
@@ -31,10 +32,11 @@ public class GroovyModMod extends Mod {
             Fi main = scripts.child("main.groovy");
             if(main.exists() && !main.isDirectory()) {
                 try {
-                    gcl.addURL(main.file().toURI().toURL());
-                    GroovyScriptEngine engine = new GroovyScriptEngine(scripts.path(), gcl);
+                    //gcl.addURL(main.file().toURI().toURL());
+                    //GroovyScriptEngine engine = new GroovyScriptEngine(scripts.path(), gcl);
                     //engine.loadScriptByName("/main.groovy");
-                    engine.run(main.name(), "");
+                    //engine.run(main.name(), "");
+                    new GroovyShell().evaluate(main.readString());
                     Log.info("[Groovy] Succeed to load mod: @", mod.name);
                 } catch (Exception e) {
                     Log.err("failed to load groovy script.");
