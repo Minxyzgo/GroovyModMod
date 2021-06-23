@@ -19,20 +19,13 @@ public class GroovyModMod extends Mod {
         //if(locate == null) throw new IllegalAccessError("Cannot find Groovy Script Loader mod");
         Vars.mods.eachEnabled(mod -> {
             //if(mod.dependencies.contains(locate)) {
-                Log.info("[Groovy] Loading mod script from mod @", mod.name);
-                try {
-                    loadScript(mod.root, mod, gcl);
-                } catch (Throwable e) {
-
-                    Log.err("[Groovy] Failed to load mod @. Skipping.", mod.name);
-                    Log.err(e);
-
-                }
+                loadScript(mod.root, mod, gcl);
             //}
         });
     }
 
     public void loadScript(Fi zip, Mods.LoadedMod mod, GroovyClassLoader gcl) {
+        Log.info("[Groovy] Loading mod script from mod @", mod.name);
 
         Fi scripts = zip.child("groovy");
         if(scripts.exists() && scripts.isDirectory()) {
